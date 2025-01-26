@@ -1,2 +1,2 @@
 # NavyComponents
-qt c++ navigftion widget and help functions
+qt c++ navigation widget and help functions
