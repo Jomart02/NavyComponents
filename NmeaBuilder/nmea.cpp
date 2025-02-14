@@ -39,7 +39,7 @@ std::string Nmea::get_string(){
         result+=nmea_data[i];
         if(i!=nmea_data.size()-1) result+=",";
     }
-    char checksum[2]{};
+    char checksum[3]{};
     get_checksum(result,checksum);
     result+='*';
     result+=checksum;
