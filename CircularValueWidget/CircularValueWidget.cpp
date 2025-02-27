@@ -1,5 +1,6 @@
 #include "CircularValueWidget.h"
 #include <qmath.h> 
+#include <QWheelEvent>
 
 CircularValueWidget::CircularValueWidget(QWidget* parent) : QWidget(parent){
 
@@ -50,4 +51,25 @@ void CircularValueWidget::setDecimals(int dec){
 }
 int CircularValueWidget::getDecimals(){
      return m_decimals;
+}
+void CircularValueWidget::mousePressEvent(QMouseEvent *event){
+     QPoint cursorPos = event->pos();
+     if (valueFrame.contains(cursorPos)) {
+          
+     }
+     QWidget::mousePressEvent(event);
+}
+
+void CircularValueWidget::wheelEvent(QWheelEvent *event) {
+     QPoint cursorPos = event->position().toPoint();
+     if (valueFrame.contains(cursorPos)) {
+          int delta = event->angleDelta().y();
+          if (delta > 0) {
+               setValue(m_value + 1);
+          } else if (delta < 0) {
+               setValue(m_value -1);
+          }
+     } else {
+          QWidget::wheelEvent(event);
+     }
 }

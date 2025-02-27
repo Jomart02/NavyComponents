@@ -25,7 +25,9 @@ public:
 
      virtual void setUnits(int type) = 0; 
      virtual void setUnitsName(int type, QString nameUints) = 0; 
-
+protected:
+     void mousePressEvent(QMouseEvent *event) override;
+     void wheelEvent(QWheelEvent *event) override ;
 protected:
      double m_maxValue = 999.0;
      double m_minValue = 0.0;
@@ -33,6 +35,6 @@ protected:
      int curentUnits = 0;
      QString currentNameUints = "";
      int m_decimals = 1;
-     int m_value = 0.0;
-
+     double m_value = 0.0;
+     QRectF valueFrame;
 };
