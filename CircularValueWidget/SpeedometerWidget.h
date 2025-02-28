@@ -12,7 +12,7 @@ public:
 protected:
      void resizeEvent(QResizeEvent *event) override;
      void paintEvent(QPaintEvent *event) override;
-     virtual void calcValuePos(QPoint pos) override;
+     virtual void calcValuePos(QPoint pos , bool move = false) override;
 private:
      QPointF getPointOnCircle(int radius, double angleDegrees);
 private:

@@ -36,7 +36,7 @@ protected:
      bool isValidInput(const QString &currentText, const QString &input) const ;
      void  mouseMoveEvent(QMouseEvent *event) override;
      void mouseReleaseEvent(QMouseEvent *event) override;
-     virtual void calcValuePos(QPoint pos) = 0;
+     virtual void calcValuePos(QPoint pos, bool move = false) = 0;
 protected:
      double m_maxValue = 1500.0;
      double m_minValue = 0.0;
@@ -51,8 +51,6 @@ protected:
      QRectF valueViewFrame;
      bool m_editMode = false; // Режим редактирования
      int m_cursorPosition = 0;
-     QString newText;
-
      bool pressed=true;
-
+     bool isIntersectValueZone = false;
 };

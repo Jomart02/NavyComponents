@@ -31,8 +31,33 @@ void SpeedometerWidget::resizeEvent(QResizeEvent *event){
 }
 
 
-void SpeedometerWidget::calcValuePos(QPoint pos){
-     
+void SpeedometerWidget::calcValuePos(QPoint pos, bool move ){
+     QPoint center(width() / 2, height() / 2); // Центр виджета
+     int x_local = pos.x() - center.x(); // Перемещаем начало координат в центр
+     int y_local = center.y() - pos.y(); 
+
+     // Вычисляем расстояние до центра
+     double dist = std::sqrt(x_local * x_local + y_local * y_local);
+
+     // Вычисляем угол
+     double angle_radians = std::atan2(y_local, x_local);
+     double angle_degrees = fmod((90 - angle_radians * (180 / M_PI)), 360.0); // Используем fmod
+     if (angle_degrees < 0) {
+          angle_degrees += 360.0; // Коррекция для диапазона [0, 360]
+     }
+     int side = qMin(width(), height());
+     bool is_valueEdit = (dist > side/ 2.4 && dist < side/ 2.1);
+     if(move && isIntersectValueZone) is_valueEdit = true;
+     if((angle_degrees >= 220.0 && angle_degrees <= 360.0) && is_valueEdit){
+          double value = m_minValue + (angle_degrees - 220) * ((m_maxValue - m_minValue) / 280.0);
+          setValue(value);
+          isIntersectValueZone = true;
+     }else if((angle_degrees >= 0 && angle_degrees <= 140.0) && is_valueEdit){
+          angle_degrees += 360.0;
+          double value = m_minValue + (angle_degrees - 220) * ((m_maxValue - m_minValue) / 280.0);
+          setValue(value);
+          isIntersectValueZone = true;
+     }
 }
 
 void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
@@ -49,7 +74,7 @@ void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
      QPointF point225 = getPointOnCircle(radius1,220);
      painter.setPen(QPen(Qt::red, 2));
      QPointF point125 = getPointOnCircle(radius1,140);
-
+     
      // Создаём путь для рисования
      QPainterPath path;
      qreal angleStart = 310.0; // Начальный угол для дуги (вершина вверху)

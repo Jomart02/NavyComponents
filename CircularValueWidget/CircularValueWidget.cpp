@@ -1,9 +1,9 @@
 #include "CircularValueWidget.h"
 #include <qmath.h> 
 #include <QWheelEvent>
+#include <QLocale>
 #include <QRegularExpression>
 CircularValueWidget::CircularValueWidget(QWidget* parent) : QWidget(parent){
-
 }
 
 CircularValueWidget::~CircularValueWidget(){
@@ -61,17 +61,16 @@ void CircularValueWidget::mousePressEvent(QMouseEvent *event){
      QWidget::mousePressEvent(event);
 }
 void CircularValueWidget::mouseMoveEvent(QMouseEvent *event){
-     // QPoint cursorPos = event->pos();
-     // if(pressed){
-     //      if (valueViewFrame.contains(cursorPos)){
-     //           calcValuePos(cursorPos);
-     //      }
-     // }
+     QPoint cursorPos = event->pos();
+     if(pressed){
+          calcValuePos(cursorPos,true);
+     }
      QWidget::mouseMoveEvent(event);
 }
 
 void CircularValueWidget::mouseReleaseEvent(QMouseEvent *event){
      pressed = false;
+     isIntersectValueZone = false;
      QWidget::mouseReleaseEvent(event);
 }
 
@@ -120,25 +119,29 @@ void CircularValueWidget::toggleEditMode(bool enable) {
           QWidget::keyPressEvent(event); // Если не в режиме редактирования, передаем событие дальше
           return;
       }
-     // QString currentText = QString::number(m_value, 'f', m_decimals); // Текущее значение как строка
+     QString currentText = QString::number(m_value, 'f', m_decimals); // Текущее значение как строка
      
 
      switch (event->key()) {
           case Qt::Key_Left: // Перемещение курсора влево
                m_cursorPosition = qMax(0, m_cursorPosition - 1);
+               update();
+               return;
           break;
           case Qt::Key_Right: // Перемещение курсора вправо
-               m_cursorPosition = qMin(newText.size(), m_cursorPosition + 1);
+               m_cursorPosition = qMin(currentText.size(), m_cursorPosition + 1);
+               update();
+               return;
           break;
           case Qt::Key_Backspace: // Удаление символа слева от курсора
                if (m_cursorPosition > 0) {
-                    newText.remove(m_cursorPosition - 1, 1);
+                    currentText.remove(m_cursorPosition - 1, 1);
                     m_cursorPosition--;
                }
           break;
           case Qt::Key_Delete: // Удаление символа справа от курсора
-               if (m_cursorPosition < newText.size()) {
-                    newText.remove(m_cursorPosition, 1);
+               if (m_cursorPosition < currentText.size()) {
+                    currentText.remove(m_cursorPosition, 1);
                }
           break;
 
@@ -151,14 +154,14 @@ void CircularValueWidget::toggleEditMode(bool enable) {
           return;
 
           default:
-               if (event->text().size() == 1 && isValidInput(newText, event->text())) {
+               if (event->text().size() == 1 && isValidInput(currentText, event->text())) {
                     // Вставляем символ в текущую позицию курсора
-                    QString temp = newText;
+                    QString temp = currentText;
                     temp.insert(m_cursorPosition, event->text());
                     bool ok = false;
                     double newValue = temp.toDouble(&ok);
                     if (ok && newValue<m_maxValue) {
-                         newText.insert(m_cursorPosition, event->text());
+                         currentText.insert(m_cursorPosition, event->text());
                          m_cursorPosition++;
                     }
                } else {
@@ -169,16 +172,14 @@ void CircularValueWidget::toggleEditMode(bool enable) {
 
 
      bool ok = false;
-     double newValue = newText.toDouble(&ok);
+     double newValue = currentText.toDouble(&ok);
      
      if (ok) {
          setValue(newValue);
      } else {
          return; // Игнорируем некорректные значения
      }
-     // currentText = QString::number(m_value, 'f', m_decimals);
-     // updateCursorPosition(currentText); // Корректируем позицию курсора
-     // update(); // Перерисовываем виджет
+
  }
 
 
