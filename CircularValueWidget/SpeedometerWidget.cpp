@@ -3,12 +3,13 @@
 #include <QFontDatabase>
 #include <QLocale>
 #include <QPainterPath>
-
+#include <QColor>
 SpeedometerWidget::SpeedometerWidget(QWidget* parent) : CircularValueWidget(parent){
      Q_INIT_RESOURCE(res);
      int fontId = QFontDatabase::addApplicationFont(":/lcd"); 
      QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
      fontValue =  QFont(fontFamily, 48); 
+
 }
 
 SpeedometerWidget::~SpeedometerWidget(){
@@ -23,13 +24,15 @@ void SpeedometerWidget::setUnitsName(int type, QString nameUints){
 } 
 
 void SpeedometerWidget::resizeEvent(QResizeEvent *event){
-     // widgetFrame = rect();
-     // widgetFrame.setSize(QSize(widgetFrame.width(),widgetFrame.height()));
      Q_UNUSED(event);
-
      // Устанавливаем фиксированный размер виджета как квадрат
      int side = qMin(width(), height());
      resize(side, side);
+}
+
+
+void SpeedometerWidget::calcValuePos(QPoint pos){
+     
 }
 
 void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
@@ -37,13 +40,8 @@ void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
 
      QPainter painter(this);
      painter.setRenderHint(QPainter::Antialiasing); 
-
-     painter.setBrush(Qt::black);
-     painter.setPen(Qt::transparent);
-
      // Рисуем круг
      int side = qMin(width(), height());
-
      painter.translate(width() / 2, height() / 2);
 
      qreal radius1 = side / 2; // Радиус эллипса
@@ -67,24 +65,61 @@ void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
      painter.setPen(Qt::transparent); // Без контура
      painter.drawPath(path); // Рисуем путь
      
-     int radius = side / 2 - 10; // Отступ от края круга
 
-     painter.setPen(QPen(Qt::green, 3)); // Зеленый цвет для дуги
-     int startAngle = 310 * 16;          // Начальный угол (225°, умноженный на 16)
-     int spanAngle = 280 * 16;          // Длина дуги (-100°, так как движемся по часовой стрелке)
+     qreal scale_factor = 0.4;
+     qreal lift_amount = -(side / 10);
+     QTransform transformp;
+     transformp.scale(scale_factor, scale_factor);
+     transformp.translate(0, lift_amount);
+     QPainterPath scaledPath = transformp.map(path);
+     QColor colorSenter = QColor("#d9c1c3");
+     // Создаем радиальный градиент
+     QRadialGradient gradientBack(QPointF(0,0), side/2, QPointF(0,0)); // (центр, радиус, фокус)
+     for (qreal pos = 0.0; pos <= 1.0; pos += 0.1) {
+          // Вычисляем альфа-компонент для текущей позиции
+          qreal k = 4.5;
+          // Вычисляем альфа-компонент с использованием экспоненциальной функции
+          qreal alpha = qExp(-k * pos); // Экспоненциальное затухание
+          colorSenter.setAlphaF(alpha);
+          // Добавляем остановку градиента
+          gradientBack.setColorAt(pos, colorSenter);
+      }
 
-     // Прямоугольник для ограничения области дуги
-     QRect arcRect(-side / 2.2, -side / 2.2, 2 * (side / 2.2), 2 * (side / 2.2));
+     // Создаем кисть с градиентом
+     painter.setBrush(QBrush(gradientBack));
+     painter.setPen(Qt::transparent);
+     painter.drawPath(scaledPath);
 
-     painter.drawArc(arcRect, startAngle, spanAngle); // Рисуем дугу
 
-     // Опционально: добавляем метки на шкале
+     // Рассчитываем угол для значения m_value
+     angleValue = 220 + (m_value - m_minValue) / (m_maxValue - m_minValue) * 280;
+     int radius = side / 2 ; // Отступ от края круга
+     if(m_value  > 0 ){         
+          QLinearGradient gradient(-side / 2.1, -side / 2.1, side / 2.1, side / 2.1); 
+          gradient.setColorAt(0.0, Qt::green); 
+          gradient.setColorAt(1.0, Qt::red); 
+          painter.setPen(QPen(QBrush(gradient), (side / 2.1) - (side / 2.25), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+          painter.setBrush(Qt::transparent);
+          int startAngle = 220; // Начальный угол в градусах
+          int endAngle = angleValue; // Конечный угол в градусах
+          int stepAngle = 1; // Шаг угла (рисуем линию каждые 1 градус)
+          
+          QPainterPath pathLine;
+          pathLine.moveTo( getPointOnCircle(side / 2.1,startAngle));
+          for (int angle = startAngle; angle <= endAngle; ++angle) {
+               // Вычисляем текущий угол в радианах
+               pathLine.lineTo(getPointOnCircle(side / 2.1,angle));
+          }
+          painter.drawPath(pathLine);
+     }
+
+     // добавляем метки на шкале
      
      const int numTicks = 14;            // Количество меток на шкале
      const double angleStep = 280.0 / numTicks; // Шаг между метками
 
      QFont fontTics;
-     fontTics.setPointSize(side/56);
+     fontTics.setPointSize(side/45);
      fontTics.setBold(true);
      painter.setFont(fontTics);
 
@@ -164,26 +199,83 @@ void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
      QFontMetrics fm(fontValue);
     
      int textWidth = fm.horizontalAdvance(text);
-     int textHeight = fm.height();               
-
-     int x = 0-textWidth/1.7; 
+     int textHeight = fm.ascent();               
+     int textHeightDelta = -(textHeight-textHeight/5);    
+     int x = 0-textWidth/2; 
      int y = side/4;
-
-     // valueFrame = QRect(x, y+textHeight, textWidth, textHeight);
+     if(m_editMode) painter.setPen(Qt::yellow);
+     else painter.setPen(Qt::white);
      painter.drawText(x, y, text);
 
      // Создаем исходный прямоугольник для текста
-     QRect originalRect(x, y-textHeight, textWidth, textHeight);
-
+     QRect originalRect(x, y, textWidth, textHeightDelta);
      // Применяем текущее преобразование к исходному прямоугольнику
      QTransform transform = painter.transform();
      QPolygonF transformedRect = transform.mapToPolygon(originalRect);
-
      // Получаем ограничивающий прямоугольник
      QRectF boundingRect = transformedRect.boundingRect();
-
      // Преобразуем в QRect
      valueFrame = boundingRect.toAlignedRect();
+     if(m_editMode){
+          QString leftPart = text.left(m_cursorPosition);
+          int cursorX = fm.horizontalAdvance(leftPart) - textWidth/2;
+          int cursorY = originalRect.y();
+          
+          // Рисуем вертикальную линию для курсора
+          painter.setPen(QPen(Qt::red, 5));
+          painter.drawLine(cursorX, cursorY, cursorX, cursorY+textHeightDelta);
+     }
+     
+     painter.setPen(Qt::white);
+     QFont names =  QFont("Helvetica",side/25);
+     names.setBold(true);
+     painter.setFont(names);
+     
+     QFontMetrics fontunits(painter.font());
+    
+     int textWidthUnits = fontunits.horizontalAdvance(currentNameUints);
+     int xUnits = 0-textWidthUnits/2; 
+     int yUnits = side/3;
+     painter.drawText(xUnits, yUnits, currentNameUints);
+
+     int textWidthName= fontunits.horizontalAdvance(nameValue);
+     int xName = 0-textWidthName/2; 
+     int yName = -side/8;
+     painter.drawText(xName, yName, nameValue);
+
+     qreal diamEllipse = side/7;
+
+     
+
+     painter.rotate(angleValue);
+     QPointF pointAngleValue = getPointOnCircle(radius1,angleValue);
+     QPainterPath pathTriangle;
+
+     pathTriangle.moveTo(0 + (diamEllipse / 2), 0); // Первая вершина (справа от центра)
+     pathTriangle.lineTo(0 - (diamEllipse / 2), 0); // Вторая вершина (слева от центра)
+     pathTriangle.lineTo(0, -(side / 2.5));          // Третья вершина (наверху)
+     pathTriangle.closeSubpath();                  // Замыкаем треугольник
+
+
+     QTransform transformTriangle = painter.transform();
+     QPolygonF transformedRectTriangle = transform.mapToPolygon(originalRect);
+     // Получаем ограничивающий прямоугольник
+     QRectF boundingRectTriangle = transformedRect.boundingRect();
+
+     valueViewFrame = boundingRect.toAlignedRect();
+
+     QColor colorTriangle("#f62434");
+     colorTriangle.setAlpha(128);
+     painter.setBrush(colorTriangle); // Цвет заливки треугольника
+     painter.setPen(Qt::transparent); // Без контура
+     painter.drawPath(pathTriangle); // Рисуем треугольни
+
+     colorTriangle.setAlpha(255);
+     painter.setBrush(colorTriangle);
+     painter.drawEllipse(0-diamEllipse/2,0-diamEllipse/2,diamEllipse,diamEllipse);     
+
+
+
 }
 
 QPointF SpeedometerWidget::getPointOnCircle(int radius, double angleDegrees) {
