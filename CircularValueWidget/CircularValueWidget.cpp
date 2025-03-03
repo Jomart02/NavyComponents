@@ -47,11 +47,44 @@ bool CircularValueWidget::getReadOnly(){
      return m_readOnly;
 }
 void CircularValueWidget::setDecimals(int dec){
-     m_decimals = dec;
+     if(m_decimals!= dec){
+          m_decimals = dec;
+          update();
+     }
 }
 int CircularValueWidget::getDecimals(){
      return m_decimals;
 }
+QString CircularValueWidget::getNameValue(){
+     return m_nameValue;
+}
+void CircularValueWidget::setNameValue(QString name){
+     if(m_nameValue!= name){
+          m_nameValue = name;
+          update();
+     }
+}
+QString CircularValueWidget::getNameUints(){
+     return m_nameUints;
+}
+void CircularValueWidget::setNameUints(QString name){
+     if(m_nameUints!= name){
+          m_nameUints = name;
+          update();
+     }
+}
+double CircularValueWidget::getStep(){
+     return m_step;
+}
+void CircularValueWidget::setStep(double step){
+     if(m_step!= step){
+          m_step = step;
+     }
+}
+
+
+//========================================================================================================\\
+
 void CircularValueWidget::mousePressEvent(QMouseEvent *event){
      QPoint cursorPos = event->pos();
      pressed = true;
@@ -169,7 +202,6 @@ void CircularValueWidget::toggleEditMode(bool enable) {
                }
           break;
      }
-
 
      bool ok = false;
      double newValue = currentText.toDouble(&ok);

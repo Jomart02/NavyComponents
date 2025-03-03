@@ -3,11 +3,14 @@
 
 class CircularValueWidget : public QWidget{
      Q_OBJECT
-     // Q_PROPERTY(int desimals READ getBackground WRITE setDecimals)
      Q_PROPERTY(bool readOnly READ getReadOnly WRITE setReadOnly)
      Q_PROPERTY(double maxValue READ getMaximum WRITE setMaximum)
      Q_PROPERTY(double minValue READ getMinimum WRITE setMinimum)
      Q_PROPERTY(double value READ getMinimum WRITE setMinimum)
+     Q_PROPERTY(QString nameValue READ getNameValue WRITE setNameValue)
+     Q_PROPERTY(QString nameUints READ getNameUints WRITE setNameUints)
+     Q_PROPERTY(double step READ getStep WRITE setStep)
+     Q_PROPERTY(double decimals READ getDecimals WRITE setDecimals)
 public:
      CircularValueWidget(QWidget *parent = nullptr);
      ~CircularValueWidget();
@@ -22,10 +25,12 @@ public:
      int getDecimals();
      void setValue(double value);
      double getValue();
-
-     virtual void setUnits(int type) = 0; 
-     virtual void setUnitsName(int type, QString nameUints) = 0; 
-     
+     QString getNameValue();
+     void setNameValue(QString name);
+     QString getNameUints();
+     void setNameUints(QString name);
+     double getStep();
+     void setStep(double step);
 protected:
      void toggleEditMode(bool enable);
      void mousePressEvent(QMouseEvent *event) override;
@@ -41,9 +46,8 @@ protected:
      double m_maxValue = 1500.0;
      double m_minValue = 0.0;
      bool m_readOnly = false;
-     int curentUnits = 0;
-     QString currentNameUints = "knots";
-     QString nameValue = "BMW";
+     QString m_nameUints = "";
+     QString m_nameValue = "";
      int m_decimals = 1;
      double m_value = 0.0;
      double m_step = 1.0;
