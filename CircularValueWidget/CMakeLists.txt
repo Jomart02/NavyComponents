@@ -37,7 +37,7 @@ set(QRCS
 
 add_library(${PLUGIN} SHARED ${HDRS} ${SRCS} ${QRCS})
 
-target_link_libraries(${PLUGIN} Qt6::Widgets Qt6::Designer Qt6::Core Qt6::Gui)
+target_link_libraries(${PLUGIN} PRIVATE Qt6::Widgets Qt6::Designer Qt6::Core Qt6::Gui)
 
 # add_executable(${PROJECT_NAME}  ${SRCS} ${QRCS})
 # target_link_libraries(${PROJECT_NAME}  Qt6::Core Qt6::Widgets)
