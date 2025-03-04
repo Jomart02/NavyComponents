@@ -10,9 +10,6 @@ SpeedometerWidget::SpeedometerWidget(QWidget* parent) : CircularValueWidget(pare
     QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
     fontValue =  QFont(fontFamily, 48); 
 
-    connect(this, &SpeedometerWidget::valueChanged, [](double value){
-        qDebug() << value;
-    });
 }
 
 SpeedometerWidget::~SpeedometerWidget(){
