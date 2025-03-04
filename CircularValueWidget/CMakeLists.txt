@@ -11,10 +11,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-# set(SRCS CircularValueWidget.cpp CircularValueWidget.h SpeedometerWidget.cpp SpeedometerWidget.h main.cpp)
-
-
-
 set(HDRS
     CircularValueWidget.h
     SpeedometerWidget.h
@@ -39,9 +35,12 @@ add_library(${PLUGIN} SHARED ${HDRS} ${SRCS} ${QRCS})
 
 target_link_libraries(${PLUGIN} PRIVATE Qt6::Widgets Qt6::Designer Qt6::Core Qt6::Gui)
 
+
 # add_executable(${PROJECT_NAME}  ${SRCS} ${QRCS})
 # target_link_libraries(${PROJECT_NAME}  Qt6::Core Qt6::Widgets)
 
 install(TARGETS ${PLUGIN}
     DESTINATION ${QT6_INSTALL_PREFIX}/${QT6_INSTALL_PLUGINS}/designer
 )
+
+target_include_directories(${PLUGIN} PUBLIC ./)
