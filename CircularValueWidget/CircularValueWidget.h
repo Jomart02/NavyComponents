@@ -6,7 +6,7 @@ class CircularValueWidget : public QWidget{
      Q_PROPERTY(bool readOnly READ getReadOnly WRITE setReadOnly)
      Q_PROPERTY(double maxValue READ getMaximum WRITE setMaximum)
      Q_PROPERTY(double minValue READ getMinimum WRITE setMinimum)
-     Q_PROPERTY(double value READ getMinimum WRITE setMinimum)
+     Q_PROPERTY(double value READ getValue WRITE setValue USER true)
      Q_PROPERTY(QString nameValue READ getNameValue WRITE setNameValue)
      Q_PROPERTY(QString nameUints READ getNameUints WRITE setNameUints)
      Q_PROPERTY(double step READ getStep WRITE setStep)
@@ -31,6 +31,8 @@ public:
      void setNameUints(QString name);
      double getStep();
      void setStep(double step);
+signals:
+     void valueChanged(double value);
 protected:
      void toggleEditMode(bool enable);
      void mousePressEvent(QMouseEvent *event) override;
@@ -43,7 +45,7 @@ protected:
      void mouseReleaseEvent(QMouseEvent *event) override;
      virtual void calcValuePos(QPoint pos, bool move = false) = 0;
 protected:
-     double m_maxValue = 1500.0;
+     double m_maxValue = 100.0;
      double m_minValue = 0.0;
      bool m_readOnly = false;
      QString m_nameUints = "";

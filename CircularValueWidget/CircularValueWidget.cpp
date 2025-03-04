@@ -33,8 +33,10 @@ double CircularValueWidget::getMinimum() const {
      return m_minValue;
 }
 void CircularValueWidget::setValue(double value){
+     double pref = m_value;
      m_value = qBound(m_minValue, value, m_maxValue);
      update();
+     if(pref!= m_value) valueChanged(m_value);
 }
 double CircularValueWidget::getValue(){
      return m_value;
