@@ -4,6 +4,7 @@
 #include <QLocale>
 #include <QRegularExpression>
 CircularValueWidget::CircularValueWidget(QWidget* parent) : QWidget(parent){
+     setFocusPolicy(Qt::StrongFocus);
 }
 
 CircularValueWidget::~CircularValueWidget(){
@@ -123,8 +124,9 @@ void CircularValueWidget::wheelEvent(QWheelEvent *event) {
      }
 }
 void CircularValueWidget::toggleEditMode(bool enable) {
-     if(m_editMode && m_editMode) m_editMode = false;
+     if(m_editMode) m_editMode = false;
      else m_editMode = enable;
+     if(m_editMode ) setFocus();
      update(); // Перерисовываем виджет
  }
  void CircularValueWidget::mouseDoubleClickEvent(QMouseEvent *event)  {
