@@ -3,11 +3,11 @@
 
 class SpeedometerWidget : public CircularValueWidget{
      Q_OBJECT
-     Q_PROPERTY(QColor background READ getBackground WRITE setBackground DESIGNABLE false)
-     Q_PROPERTY(QColor textNameColor READ getTextNameColor WRITE setTextNameColor DESIGNABLE false)
-     Q_PROPERTY(QColor textValueColor READ getTextValueColor WRITE setTextValueColor DESIGNABLE false)
-     Q_PROPERTY(QColor textUintsColor READ getUintsColor WRITE setUintsColor DESIGNABLE false)
-     Q_PROPERTY(QColor marksColor READ getMarksColor WRITE setMarksColor DESIGNABLE false)
+     Q_PROPERTY(QColor background READ getBackground WRITE setBackground DESIGNABLE true)
+     Q_PROPERTY(QColor textNameColor READ getTextNameColor WRITE setTextNameColor DESIGNABLE true)
+     Q_PROPERTY(QColor textValueColor READ getTextValueColor WRITE setTextValueColor DESIGNABLE true)
+     Q_PROPERTY(QColor textUintsColor READ getUintsColor WRITE setUintsColor DESIGNABLE true)
+     Q_PROPERTY(QColor marksColor READ getMarksColor WRITE setMarksColor DESIGNABLE true)
 public:   
      SpeedometerWidget(QWidget *parent = nullptr);
      ~SpeedometerWidget();

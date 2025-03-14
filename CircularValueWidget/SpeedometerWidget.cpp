@@ -20,30 +20,35 @@ QColor SpeedometerWidget::getBackground(){
 }
 void SpeedometerWidget::setBackground(QColor color){
     m_background = color;
+    update();
 }
 QColor SpeedometerWidget::getTextNameColor(){
     return m_textNameColor;
 }
 void SpeedometerWidget::setTextNameColor(QColor color){
     m_textNameColor = color;
+    update();
 }
 QColor SpeedometerWidget::getTextValueColor(){
      return m_textValueColor;
 }
 void SpeedometerWidget::setTextValueColor(QColor color){
     m_textValueColor = color;
+    update();
 }
 QColor SpeedometerWidget::getUintsColor(){
     return m_textUintsColor;
 }
 void SpeedometerWidget::setUintsColor(QColor color){
     m_textUintsColor = color;
+    update();
 }
 QColor SpeedometerWidget::getMarksColor(){
     return m_marksColor;
 }
 void SpeedometerWidget::setMarksColor(QColor color){
     m_marksColor = color;
+    update();
 }
 
 
