@@ -29,7 +29,6 @@ protected:
      virtual void calcValuePos(QPoint pos , bool move = false) override;
 private:
      QPointF getPointOnCircle(int radius, double angleDegrees);
-     void preparePainter(QPainter &painter);
      void drawBackground(QPainter &painter, int side) ;
      void drawValueIndicator(QPainter &painter, int side);
      void drawScaleMarks(QPainter &painter, int side);

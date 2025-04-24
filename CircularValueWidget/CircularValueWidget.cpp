@@ -3,6 +3,8 @@
 #include <QWheelEvent>
 #include <QLocale>
 #include <QRegularExpression>
+#include <QPainter>
+
 CircularValueWidget::CircularValueWidget(QWidget* parent) : QWidget(parent){
      setFocusPolicy(Qt::StrongFocus);
 }
@@ -35,9 +37,20 @@ double CircularValueWidget::getMinimum() const {
 }
 void CircularValueWidget::setValue(double value){
      double pref = m_value;
-     m_value = qBound(m_minValue, value, m_maxValue);
-     update();
-     if(pref!= m_value) valueChanged(m_value);
+     if (m_wrapping) {
+         double range = m_maxValue - m_minValue;
+         value = m_minValue + std::fmod(value - m_minValue, range);
+         if (value < m_minValue) {
+             value += range;
+         }
+     } else {
+         value = qBound(m_minValue, value, m_maxValue);
+     }
+     m_value = value;
+     if (pref != m_value) {
+          update();
+         valueChanged(m_value);
+     }
 }
 double CircularValueWidget::getValue(){
      return m_value;
@@ -48,6 +61,12 @@ void CircularValueWidget::setReadOnly(bool readOnly){
 }
 bool CircularValueWidget::getReadOnly(){
      return m_readOnly;
+}
+void CircularValueWidget::setWrapping(bool wrapping){
+     m_wrapping = wrapping;
+}
+bool CircularValueWidget::getWrapping(){
+     return m_wrapping;
 }
 void CircularValueWidget::setDecimals(int dec){
      if(m_decimals!= dec){
@@ -237,3 +256,10 @@ void CircularValueWidget::toggleEditMode(bool enable) {
      m_cursorPosition = qMin(m_cursorPosition, newText.size());
      update();
  }
+
+
+void CircularValueWidget::preparePainter(QPainter &painter){
+     painter.setRenderHint(QPainter::Antialiasing);
+     int side = qMin(width(), height());
+     painter.translate(width() / 2, height() / 2);
+}

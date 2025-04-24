@@ -4,6 +4,7 @@
 class CircularValueWidget : public QWidget{
      Q_OBJECT
      Q_PROPERTY(bool readOnly READ getReadOnly WRITE setReadOnly)
+     Q_PROPERTY(bool wrapping READ getWrapping WRITE setWrapping)
      Q_PROPERTY(double maxValue READ getMaximum WRITE setMaximum)
      Q_PROPERTY(double minValue READ getMinimum WRITE setMinimum)
      Q_PROPERTY(double value READ getValue WRITE setValue USER true)
@@ -21,6 +22,8 @@ public:
      double getMinimum() const;
      void setReadOnly(bool readOnly);
      bool getReadOnly();
+     void setWrapping(bool wrapping);
+     bool getWrapping();
      void setDecimals(int dec);
      int getDecimals();
      void setValue(double value);
@@ -44,10 +47,12 @@ protected:
      void  mouseMoveEvent(QMouseEvent *event) override;
      void mouseReleaseEvent(QMouseEvent *event) override;
      virtual void calcValuePos(QPoint pos, bool move = false) = 0;
+     void preparePainter(QPainter &painter);
 protected:
      double m_maxValue = 100.0;
      double m_minValue = 0.0;
      bool m_readOnly = false;
+     bool m_wrapping = false;
      QString m_nameUints = "";
      QString m_nameValue = "";
      int m_decimals = 1;

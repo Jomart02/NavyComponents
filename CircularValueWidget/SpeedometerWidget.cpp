@@ -109,12 +109,6 @@ void SpeedometerWidget::paintEvent(QPaintEvent *event)  {
 
 }
 
-void SpeedometerWidget::preparePainter(QPainter &painter) {
-    painter.setRenderHint(QPainter::Antialiasing);
-    int side = qMin(width(), height());
-    painter.translate(width() / 2, height() / 2);
-}
-
 void SpeedometerWidget::drawBackground(QPainter &painter, int side) {
     qreal radius1 = side / 2;
     QPointF point220 = getPointOnCircle(radius1, 220);

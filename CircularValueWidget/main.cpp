@@ -1,12 +1,12 @@
 #include <QApplication>
 #include <QWidget>
 #include "CircularValueWidget.h"
-#include "SpeedometerWidget.h"
+#include "CompassWidget.h"
 #include <QObject>
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    SpeedometerWidget *w = new SpeedometerWidget();
+    CompassWidget *w = new CompassWidget();
     w->show();
     return app.exec();
 
