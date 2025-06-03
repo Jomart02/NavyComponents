@@ -6,7 +6,8 @@ enum class DirectLocError {
     DIRECLOC_NOERROR = 0,
     DIRECLOC_INVALID_LAT,
     DIRECLOC_INVALID_LON,
-    DIRECLOC_DISTANCE_TOO_SMALL
+    DIRECLOC_DISTANCE_TOO_SMALL,
+    DIRECLOC_INVALID_METHOD
 };
 
 DirectLocError PositionByDistanceBearing(
@@ -15,6 +16,27 @@ DirectLocError PositionByDistanceBearing(
     double bearingRad,
     EllipsoidType ellipsoid,
     DirectCalculationMethod method,
+    GEO_POINT& endPnt
+);
+DirectLocError PositionByDistanceBearing_Geodesic(
+    const GEO_POINT& startPnt,
+    double distanceMeters,
+    double bearingRad,
+    EllipsoidType ellipsoidType,
+    GEO_POINT& endPnt
+);
+DirectLocError PositionByDistanceBearing_Loxodrome(
+    const GEO_POINT& startPnt,
+    double distanceMeters,
+    double bearingRad,
+    EllipsoidType ellipsoidType,
+    GEO_POINT& endPnt
+) ;
+DirectLocError PositionByDistanceBearing_Ortho(
+    const GEO_POINT& startPnt,
+    double distanceMeters,
+    double bearingRad,
+    EllipsoidType ellipsoidType,
     GEO_POINT& endPnt
 );
 

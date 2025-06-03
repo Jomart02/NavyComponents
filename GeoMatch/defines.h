@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#define M_2PI 6.283185307179586 // 2 * M_PI
 
 // Перечисление доступных эллипсоидов
 enum class EllipsoidType {
