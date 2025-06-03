@@ -18,4 +18,13 @@ class Nmea{
         std::string get_string();
 };
 
+
+namespace helpFuncNmea {
+    // Форматирует широту в строку формата ddmm.mm и возвращает направление (N/S)
+    void formatLatitude(double lat, std::string& latString, std::string& direction) ;
+    // Форматирует долготу в строку формата dddmm.mm и возвращает направление (E/W)
+    void formatLongitude(double lon, std::string& lonString, std::string& direction);
+
+}
+
 #endif 
