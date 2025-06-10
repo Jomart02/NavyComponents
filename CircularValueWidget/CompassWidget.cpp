@@ -18,6 +18,42 @@ CompassWidget::CompassWidget(QWidget* parent) : CircularValueWidget(parent){
 CompassWidget::~CompassWidget(){
 
 }
+QColor CompassWidget::getBackground(){
+    return m_background;
+}
+void CompassWidget::setBackground(QColor color){
+    m_background = color;
+    update();
+}
+QColor CompassWidget::getTextNameColor(){
+    return m_textNameColor;
+}
+void CompassWidget::setTextNameColor(QColor color){
+    m_textNameColor = color;
+    update();
+}
+QColor CompassWidget::getTextValueColor(){
+     return m_textValueColor;
+}
+void CompassWidget::setTextValueColor(QColor color){
+    m_textValueColor = color;
+    update();
+}
+QColor CompassWidget::getUintsColor(){
+    return m_textUintsColor;
+}
+void CompassWidget::setUintsColor(QColor color){
+    m_textUintsColor = color;
+    update();
+}
+QColor CompassWidget::getMarksColor(){
+    return m_marksColor;
+}
+void CompassWidget::setMarksColor(QColor color){
+    m_marksColor = color;
+    update();
+}
+
 
 
 void CompassWidget::resizeEvent(QResizeEvent *event) {
