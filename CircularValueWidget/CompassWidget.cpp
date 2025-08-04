@@ -173,7 +173,7 @@ void CompassWidget::drawDirectionLabels(QPainter &painter, qreal radius, qreal w
 
 
      QFont angleFont = fontValue;
-     angleFont.setPixelSize(radius / 20); 
+     angleFont.setPixelSize(radius / 12); 
      angleFont.setBold(true);
      painter.setFont(angleFont);
 

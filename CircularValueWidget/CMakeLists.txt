@@ -73,9 +73,10 @@ install(TARGETS ${PLUGINS}
     DESTINATION ${QT6_INSTALL_PREFIX}/${QT6_INSTALL_PLUGINS}/designer
 )
 
-# Сборка тестов (если включена)
-# if(BUILD_TESTS)
-#     add_executable(${PROJECT_NAME}_Test ${WIDGET_HDRS} ${WIDGET_SRCS} ${QRCS} main.cpp)
-#     target_link_libraries(${PROJECT_NAME}_Test PRIVATE ${PROJECT_NAME}_Widgets Qt6::Widgets Qt6::Core Qt6::Gui)
-#     target_include_directories(${PROJECT_NAME}_Test PUBLIC ./)
-# endif()
+#Сборка тестов (если включена)
+
+if(BUILD_TESTS)
+    add_executable(${PROJECT_NAME}_Test ${WIDGET_HDRS} ${WIDGET_SRCS} ${QRCS} main.cpp)
+    target_link_libraries(${PROJECT_NAME}_Test PRIVATE ${PROJECT_NAME} Qt6::Widgets Qt6::Core Qt6::Gui)
+    target_include_directories(${PROJECT_NAME}_Test PUBLIC ./)
+endif()
