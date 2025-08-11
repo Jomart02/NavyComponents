@@ -90,6 +90,17 @@ Supports customization via qss
 
 Double click to enable keyboard editing of the value
 
-![lon](./gitRes/speed.gif)
+![speed](./gitRes/speed.gif)
+
+This class can be built as a plugin for qt designer
+
+## CompassWidget
+CompassWidget widget
+Allows you to display values ​​and edit
+Supports customization via qss
+
+Double click to enable keyboard editing of the value
+
+![compass](./gitRes/compas.gif)
 
 This class can be built as a plugin for qt designer
