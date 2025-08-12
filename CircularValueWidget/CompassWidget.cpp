@@ -8,7 +8,7 @@
 
 
 CompassWidget::CompassWidget(QWidget* parent) : CircularValueWidget(parent){
-     Q_INIT_RESOURCE(res);
+     Q_INIT_RESOURCE(resCircularWidgets);
      int fontId = QFontDatabase::addApplicationFont(":/lcd"); 
      QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
      fontValue =  QFont(fontFamily, 48); 

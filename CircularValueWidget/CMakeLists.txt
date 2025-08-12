@@ -42,7 +42,7 @@ set(PLUGIN_SPEED_SRCS
 
 # Ресурсы
 set(QRCS
-    ./res/res.qrc
+    ./res/resCircularWidgets.qrc
 )
 
 # Поиск Qt6

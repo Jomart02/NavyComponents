@@ -108,28 +108,37 @@ void CircularValueWidget::setStep(double step){
 //========================================================================================================\\
 
 void CircularValueWidget::mousePressEvent(QMouseEvent *event){
-     QPoint cursorPos = event->pos();
-     pressed = true;
+     if(!m_readOnly){
+          QPoint cursorPos = event->pos();
+          pressed = true;
 
-     calcValuePos(cursorPos);
-
+          calcValuePos(cursorPos);
+     }
      QWidget::mousePressEvent(event);
 }
 void CircularValueWidget::mouseMoveEvent(QMouseEvent *event){
-     QPoint cursorPos = event->pos();
-     if(pressed){
-          calcValuePos(cursorPos,true);
+     if(!m_readOnly){
+          QPoint cursorPos = event->pos();
+          if(pressed){
+               calcValuePos(cursorPos,true);
+          }
      }
      QWidget::mouseMoveEvent(event);
 }
 
 void CircularValueWidget::mouseReleaseEvent(QMouseEvent *event){
-     pressed = false;
-     isIntersectValueZone = false;
+     if(!m_readOnly){
+          pressed = false;
+          isIntersectValueZone = false;
+     }
      QWidget::mouseReleaseEvent(event);
 }
 
 void CircularValueWidget::wheelEvent(QWheelEvent *event) {
+     if(m_readOnly) {
+          QWidget::wheelEvent(event);
+          return;
+     }
      QPoint cursorPos = event->position().toPoint();
      if (valueFrame.contains(cursorPos)) {
           int delta = event->angleDelta().y();
@@ -143,12 +152,18 @@ void CircularValueWidget::wheelEvent(QWheelEvent *event) {
      }
 }
 void CircularValueWidget::toggleEditMode(bool enable) {
+     if(m_readOnly) return;
+
      if(m_editMode) m_editMode = false;
      else m_editMode = enable;
      if(m_editMode ) setFocus();
      update(); // Перерисовываем виджет
  }
  void CircularValueWidget::mouseDoubleClickEvent(QMouseEvent *event)  {
+     if(m_readOnly) {
+          QWidget::mouseDoubleClickEvent(event);
+          return;
+     }
      // Проверяем, был ли двойной клик по области текста
      if (valueFrame.contains(event->position().toPoint())) {
          toggleEditMode(true); // Включаем режим редактирования
@@ -158,7 +173,10 @@ void CircularValueWidget::toggleEditMode(bool enable) {
  }
 
  void CircularValueWidget::keyPressEvent(QKeyEvent *event) {
-
+     if(m_readOnly) {
+          QWidget::keyPressEvent(event);
+          return;
+     }
      switch (event->key()) {
           case Qt::Key_Up: // Перемещение курсора влево
                setValue(m_value + m_step);
