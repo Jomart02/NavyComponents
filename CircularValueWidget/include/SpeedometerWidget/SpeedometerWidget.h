@@ -8,6 +8,8 @@ class SpeedometerWidget : public CircularValueWidget{
      Q_PROPERTY(QColor textValueColor READ getTextValueColor WRITE setTextValueColor DESIGNABLE true)
      Q_PROPERTY(QColor textUintsColor READ getUintsColor WRITE setUintsColor DESIGNABLE true)
      Q_PROPERTY(QColor marksColor READ getMarksColor WRITE setMarksColor DESIGNABLE true)
+     Q_PROPERTY(QString nameValue READ getNameValue WRITE setNameValue)
+     Q_PROPERTY(QString nameUints READ getNameUints WRITE setNameUints)
 public:   
      SpeedometerWidget(QWidget *parent = nullptr);
      ~SpeedometerWidget();
@@ -21,7 +23,10 @@ public:
      void setUintsColor(QColor color);
      QColor getMarksColor();
      void setMarksColor(QColor color);
-
+     QString getNameValue();
+     void setNameValue(QString name);
+     QString getNameUints();
+     void setNameUints(QString name);
 
 protected:
      void resizeEvent(QResizeEvent *event) override;
@@ -44,6 +49,7 @@ private:
      QColor m_textValueColor = Qt::white;
      QColor m_textUintsColor = Qt::white;
      QColor m_marksColor = Qt::white;
-     
+     QString m_nameUints = "";
+     QString m_nameValue = "";
 };
 

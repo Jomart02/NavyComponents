@@ -77,24 +77,7 @@ void CircularValueWidget::setDecimals(int dec){
 int CircularValueWidget::getDecimals(){
      return m_decimals;
 }
-QString CircularValueWidget::getNameValue(){
-     return m_nameValue;
-}
-void CircularValueWidget::setNameValue(QString name){
-     if(m_nameValue!= name){
-          m_nameValue = name;
-          update();
-     }
-}
-QString CircularValueWidget::getNameUints(){
-     return m_nameUints;
-}
-void CircularValueWidget::setNameUints(QString name){
-     if(m_nameUints!= name){
-          m_nameUints = name;
-          update();
-     }
-}
+
 double CircularValueWidget::getStep(){
      return m_step;
 }

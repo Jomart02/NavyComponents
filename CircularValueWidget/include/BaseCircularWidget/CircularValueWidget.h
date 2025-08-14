@@ -8,8 +8,6 @@ class CircularValueWidget : public QWidget{
      Q_PROPERTY(double maxValue READ getMaximum WRITE setMaximum)
      Q_PROPERTY(double minValue READ getMinimum WRITE setMinimum)
      Q_PROPERTY(double value READ getValue WRITE setValue USER true)
-     Q_PROPERTY(QString nameValue READ getNameValue WRITE setNameValue)
-     Q_PROPERTY(QString nameUints READ getNameUints WRITE setNameUints)
      Q_PROPERTY(double step READ getStep WRITE setStep)
      Q_PROPERTY(double decimals READ getDecimals WRITE setDecimals)
 public:
@@ -28,10 +26,6 @@ public:
      int getDecimals();
      void setValue(double value);
      double getValue();
-     QString getNameValue();
-     void setNameValue(QString name);
-     QString getNameUints();
-     void setNameUints(QString name);
      double getStep();
      void setStep(double step);
 signals:
@@ -53,8 +47,6 @@ protected:
      double m_minValue = 0.0;
      bool m_readOnly = false;
      bool m_wrapping = false;
-     QString m_nameUints = "";
-     QString m_nameValue = "";
      int m_decimals = 1;
      double m_value = 0.0;
      double m_step = 1.0;

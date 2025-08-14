@@ -50,8 +50,24 @@ void SpeedometerWidget::setMarksColor(QColor color){
     m_marksColor = color;
     update();
 }
-
-
+QString SpeedometerWidget::getNameValue(){
+     return m_nameValue;
+}
+void SpeedometerWidget::setNameValue(QString name){
+     if(m_nameValue!= name){
+          m_nameValue = name;
+          update();
+     }
+}
+QString SpeedometerWidget::getNameUints(){
+     return m_nameUints;
+}
+void SpeedometerWidget::setNameUints(QString name){
+     if(m_nameUints!= name){
+          m_nameUints = name;
+          update();
+     }
+}
 //========================================================================================================\\
 
 void SpeedometerWidget::resizeEvent(QResizeEvent *event){
